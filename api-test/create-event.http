@@ -2,7 +2,7 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id":2,
+    "id":1,
     "name":"heath_checkup",
     "description":"fullpaid health checkup for everyone ",
     "location" : "memorial hospital 2",
