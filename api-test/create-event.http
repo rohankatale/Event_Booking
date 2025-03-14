@@ -1,0 +1,11 @@
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id":2,
+    "name":"heath_checkup",
+    "description":"fullpaid health checkup for everyone ",
+    "location" : "memorial hospital 2",
+    "dateTime" : "2025-01-01T15:55:00.000Z",
+    "userid":2 
+}

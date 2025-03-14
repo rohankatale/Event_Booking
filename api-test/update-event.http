@@ -1,0 +1,9 @@
+PUT http://localhost:8080/events/3 
+Content-Type: "application/json"
+
+{
+    "name":"health_checkup",
+    "description":"updated this to check ",
+    "location" : "memorial hospital 2 updated",
+    "dateTime" : "2025-01-01T15:20:00.000Z"
+}
