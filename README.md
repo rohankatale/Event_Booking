@@ -2,6 +2,9 @@
 
 This project implements an event booking API built with Golang and the Gin web framework. It also uses SQLite for data persistence and JWT for authentication.
 
+**Note:** Users must signup and login to access the API. Once authenticated, they can create, update, delete events, and also register or unregister for events.
+
+
 ## Tech Stack
 
 - **Golang** (Go 1.24.0)
