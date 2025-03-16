@@ -1,9 +1,10 @@
-PUT http://localhost:8080/events/3 
+PUT http://localhost:8080/events/4 
 Content-Type: "application/json"
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGdtYWlsLmNvbSIsImV4cCI6MTc0MjE0MTUyOCwidXNlcklkIjoyfQ.rAB_1Ed7CQgCxucmilsbC3fnR86ejxRO8wfId7-FVyI
 
 {
     "name":"health_checkup",
-    "description":"updated this to check ",
-    "location" : "memorial hospital 2 updated",
+    "description":"updated this to check again third time ",
+    "location" : "memorial hospital 4 updated",
     "dateTime" : "2025-01-01T15:20:00.000Z"
 }

@@ -11,10 +11,10 @@ type Event struct{
 	Description string 		`binding:"required"`
 	Location string			`binding:"required"`
 	DateTime time.Time
-	UserID int 	
+	UserID int64 	
 }
 
-func(e Event) Save()error{
+func(e *Event) Save()error{
 	query :=`
 	INSERT INTO events(name ,description,location,dateTime,user_id) 
 	VALUES (?,?,?,?,?)`
@@ -29,7 +29,7 @@ func(e Event) Save()error{
 	}
 	id , err := result.LastInsertId()
 	e.ID = id
-	return err
+	return err 
 }
 
 func GetAllEvents()([]Event,error){
@@ -89,5 +89,35 @@ func DeleteEventByID(id int64) error {
 	}
 	defer stmt.Close()
 	_, err = stmt.Exec(id)
+	return err
+}
+
+func (e Event) Register(userId int64) error{
+	query := `INSERT INTO registrations(event_id,user_id) VALUES(?,?)`
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	
+	_ ,err = stmt.Exec(e.ID, userId)		
+
+	if err!=nil{
+		return err
+	}
+
+	return nil
+}
+
+func (e Event) UnRegister(userId int64) error {
+	// Correct the table name from 'registrartions' to 'registrations'
+	query := `DELETE FROM registrations WHERE event_id = ? AND user_id = ?`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(e.ID, userId)
 	return err
 }

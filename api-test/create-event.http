@@ -1,11 +1,10 @@
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QwQGdtYWlsLmNvbSIsImV4cCI6MTc0MjE1MTQ5NCwidXNlcklkIjoxfQ.xrXF1qFt9fDHSXiiR9tm8mT_OJ4GMKV0Ea_9f1rLgSo
 
 {
-    "id":1,
-    "name":"heath_checkup",
-    "description":"fullpaid health checkup for everyone ",
-    "location" : "memorial hospital 2",
-    "dateTime" : "2025-01-01T15:55:00.000Z",
-    "userid":2 
+    "name":"Old age home",
+    "description":"old age home for old people",
+    "location" : "saraswati vihar, delhi",
+    "dateTime" : "2025-01-01T15:10:10.000Z" 
 }

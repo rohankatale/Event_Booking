@@ -20,13 +20,14 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context){
+	
 	var event models.Event
-	err:=context.ShouldBindJSON(&event)
+	err :=context.ShouldBindJSON(&event)
 	if err!= nil{
 		context.JSON(http.StatusBadRequest,gin.H {"message":"could not parse requested data"})
 		return
 	}
-	event.UserID =1
+	event.UserID = context.MustGet(":userId").(int64)
 	err = event.Save()
 	if err!=nil{
 		context.JSON(http.StatusInternalServerError,gin.H{"message":"could not create the events, try again later"})
@@ -51,16 +52,26 @@ func getByID(context *gin.Context){
 }
 
 func updateEvent(context *gin.Context){
-	 eventID ,err := strconv.ParseInt(context.Param("id"),10,64)
+
+	
+
+	eventID ,err := strconv.ParseInt(context.Param("id"),10,64)
 	 if err!=nil{
 		context.JSON(http.StatusBadRequest,gin.H{"message":"could not convert string to float, try again later"})
 		return
 	}
-	_ , err = models.GetEventByID(eventID)
+	event , err := models.GetEventByID(eventID)
 	if err!=nil{
 		context.JSON(http.StatusInternalServerError,gin.H{"message":"could not get event by id, try again later"})
 		return
 	}
+
+	userId := context.MustGet(":userId").(int64)
+	if event.UserID != userId{
+		context.JSON(http.StatusUnauthorized,gin.H{"message":"not authorized to update the event"})
+		return
+	}
+
 	var updatedEvent models.Event
 	err = context.BindJSON(&updatedEvent) 
 	if err!= nil{
@@ -81,9 +92,14 @@ func deleteEvent(context *gin.Context){
 	if err!=nil{
 		context.JSON(http.StatusBadRequest,gin.H{"message":"could not parse the int"})
 	}
-	_ , err = models.GetEventByID(eventId)
+	event, err := models.GetEventByID(eventId)
 	if err!=nil{
 		context.JSON(http.StatusInternalServerError,gin.H{"message":"could not get event by id, try again later"})
+		return
+	}
+	userId := context.MustGet(":userId").(int64)
+	if event.UserID != userId{
+		context.JSON(http.StatusUnauthorized,gin.H{"message":"not authorized to delete the event"})
 		return
 	}
 	err = models.DeleteEventByID(eventId)
