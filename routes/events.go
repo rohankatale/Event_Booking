@@ -108,3 +108,14 @@ func deleteEvent(context *gin.Context){
 	}
 	context.JSON(http.StatusOK,gin.H{"message":"event deleted successfully"})
 }
+
+func searchEvents(context *gin.Context){
+	
+	strings := context.Param("string")
+	events,err := models.GetSearchedEvents(strings) 
+	if err!=nil{
+		context.JSON(http.StatusInternalServerError,gin.H{"message":"could not fetch the events, try again later"})
+		return
+	}
+	context.JSON(http.StatusOK,events)
+}

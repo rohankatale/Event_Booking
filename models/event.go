@@ -121,3 +121,30 @@ func (e Event) UnRegister(userId int64) error {
 	_, err = stmt.Exec(e.ID, userId)
 	return err
 }
+
+
+func GetSearchedEvents(searchString string) ([]Event, error) {
+	query := `SELECT * FROM events WHERE name LIKE ? OR description LIKE ? OR location LIKE ?`
+	// add wildcards for partial matching
+	pattern := "%" + searchString + "%"
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+	rows, err := stmt.Query(pattern, pattern, pattern)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var events []Event
+	for rows.Next() {
+		var event Event
+		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.DateTime, &event.UserID)
+		if err != nil {
+			return nil, err
+		}
+		events = append(events, event)
+	}
+	return events, nil
+}
