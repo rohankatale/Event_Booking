@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useAuth } from "./context/AuthContext"; // Import useAuth
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, User, EyeOff, Eye, Sun, Moon } from "lucide-react";
 import logo from "./assets/logo3.jpeg";
@@ -59,8 +61,9 @@ const buttonHoverTap = {
   },
   tap: { scale: 0.97 },
 };
-
 const Login = () => {
+  const { login } = useAuth(); // Destructure login from useAuth
+  const navigate = useNavigate(); // Initialize navigate
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -116,11 +119,18 @@ const Login = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token); // Assuming the token is returned as 'token' in the response
-      console.log("Login successful!");
-    
+      localStorage.setItem('token', data.token); // Store the token
+console.log("Login successful!");
+login(data.user); // Update the user state in AuthContext
+navigate('/'); // Redirect to homepage
+
     } catch (error) {
-      setError("Network error. Please try again.");
+      // Check if error is from the response or a network issue
+      if (error.message.includes('Login failed')) {
+         setError(error.message); // Show backend error message
+      } else {
+         setError("Network error or failed to parse response. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -236,8 +246,8 @@ const Login = () => {
                   exit="exit"
                   transition={{ duration: 0.3 }}
                   className={`
-                    p-3 // Slightly smaller padding
-                    rounded-md // Slightly less rounded
+                    p-3 
+                    rounded-md 
                     text-sm
                     border
                     ${

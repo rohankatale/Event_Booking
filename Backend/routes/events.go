@@ -3,7 +3,6 @@ package routes
 import (
 	"net/http"
 	"strconv"
-
 	"event.com/restapi/models"
 	"github.com/gin-gonic/gin"
 )

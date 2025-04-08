@@ -11,8 +11,27 @@ type Event struct{
 	Description string 		`binding:"required"`
 	Location string			`binding:"required"`
 	DateTime time.Time
+	Images []string
 	UserID int64 	
 }
+
+// func(e *Event) Save()error{
+// 	query :=`
+// 	INSERT INTO events(name ,description,location,dateTime,user_id) 
+// 	VALUES (?,?,?,?,?)`
+// 	stmt,err := db.DB.Prepare(query)
+// 	if err!=nil{
+// 		return err
+// 	}
+// 	defer stmt.Close()
+// 	result , err := stmt.Exec(e.Name,e.Description,e.Location,e.DateTime,e.UserID) // exec is used when we want to modify the values int the database 
+// 	if err!=nil{
+// 		return err
+// 	}
+// 	id , err := result.LastInsertId()
+// 	e.ID = id
+// 	return err 
+// }
 
 func(e *Event) Save()error{
 	query :=`
@@ -29,7 +48,10 @@ func(e *Event) Save()error{
 	}
 	id , err := result.LastInsertId()
 	e.ID = id
-	return err 
+	cld, ctx := db.Credentials()
+	db.UploadImage(cld,ctx,"/Users/ro..../Desktop/denji.png")
+	
+	return err
 }
 
 func GetAllEvents()([]Event,error){

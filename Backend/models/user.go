@@ -37,6 +37,22 @@ func (u User) Save()error{
 	return nil
 }
 
+// GetUserByID retrieves a user by their ID, excluding the password.
+func GetUserByID(id int64) (*User, error) {
+	query := `SELECT id, email FROM users WHERE id = ?`
+	row := db.DB.QueryRow(query, id)
+
+	var user User
+	err := row.Scan(&user.ID, &user.Email)
+	if err != nil {
+		// Could be sql.ErrNoRows or other DB error
+		return nil, err
+	}
+
+	// Password field remains empty as it wasn't selected
+	return &user, nil
+}
+
 
 func (u *User) ValidateCredentials() error {  // changed to pointer receiver
 	query := `SELECT id,password FROM users WHERE email = ?`
